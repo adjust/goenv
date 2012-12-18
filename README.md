@@ -20,7 +20,7 @@ Import it
 
 Use it
 
-    redis_host, redis_db := goenv.GetRedis()
+    redis_host, redis_port, redis_db := goenv.GetRedis()
 
 ###Exit Handler
 To make your app quit on SIGHUP and execute some function before closing use a custom exit handler.
