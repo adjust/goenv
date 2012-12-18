@@ -16,7 +16,7 @@ func GetCookieDomain() string {
 }
 
 func GetShard() int64 {
-	shardst := Get("shard", "1")
+	shardst := Get("shard", "0")
 	shard, err := strconv.ParseInt(shardst, 10, 64)
 	if err != nil {
 		log.Println("Failed to convert to int64: " + shardst)
