@@ -1,0 +1,87 @@
+# environment variables
+
+# default: development
+environment: GO_ENV
+
+# default: ./config/config.yaml
+config_file: GO_CONFIG
+
+# environments
+
+development:
+    log_file: ./log/server.log
+    port: 8080
+    cookie_domain: localhost
+    shard: 1
+    # local for sid generation
+    sid_redis:
+        db: 1
+        port: 6379
+    # fingerprinting etc.
+    redis:
+        host: localhost
+        db: 1
+        port: 6379
+    amqp:
+        user: guest
+        pass: guest
+        host: localhost
+        port: 5672
+
+testing:
+    log_file: ./log/server.log
+    port: 8080
+    cookie_domain: localhost
+    shard: 1
+    redis:
+        host: localhost
+        db: 1
+        port: 6379
+    master_redis:
+        host: localhost
+        db: 1
+        port: 6379
+    amqp:
+        user: guest
+        pass: guest
+        host: localhost
+        port: 5674
+
+staging:
+    log_file: ./log/server.log
+    port: 8080
+    cookie_domain: localhost
+    shard: 1
+    redis:
+        host: localhost
+        db: 1
+        port: 6379
+    master_redis:
+        host: localhost
+        db: 1
+        port: 6379
+    amqp:
+        user: user
+        pass: pass
+        host: localhost
+        port: 5672
+
+production:
+    log_file: ./log/server.log
+    port: 8080
+    cookie_domain: localhost
+    shard: 1
+    redis:
+        host: localhost
+        db: 1
+        port: 6379
+    master_redis:
+        host: host
+        db: 1
+        port: 6379
+    amqp:
+        user: user
+        pass: pass
+        host: localhost
+        port: 5672
+
