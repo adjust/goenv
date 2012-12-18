@@ -3,7 +3,7 @@
 This is a nifty little package to help reduce the boilerplate code of our go apps and make them behave more like rails.
 
 ##Features
-- rails style `config/database.yml` to configure different databases.
+- rails style `config/config.yaml` to configure different databases. (see `example.yaml`)
 - `GO_ENV` similar to `RAILS_ENV` to have development, testing and production databases
 - default `log/server.log` for log output
 - prefab ExitHandler to make your app handle SIGHUP correctly
