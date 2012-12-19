@@ -7,7 +7,7 @@ import (
 
 func TestSetEnvironment(t *testing.T) {
 	goenv.SetConfigFile("./config/config.yaml")
-	goenv.SetEnvironment("testing")
+	goenv.SetEnvironment("custom")
 	if goenv.GetPort() != "6711" {
 		t.Error("port != 6711")
 	}
