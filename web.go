@@ -2,6 +2,7 @@ package goenv
 
 import (
 	"log"
+	"os"
 	"strconv"
 )
 
@@ -18,9 +19,9 @@ func GetCookieDomain() string {
 func GetShard() int64 {
 	shardst := Get("shard", "0")
 	shard, err := strconv.ParseInt(shardst, 10, 64)
-	if err != nil {
-		log.Println("Failed to convert to int64: " + shardst)
-		shard = 0
+	if err != nil || shard == 0 {
+		log.Panic("Invalid shard: \"" + shardst + "\"")
+		os.Exit(1)
 	}
 	return shard
 }
