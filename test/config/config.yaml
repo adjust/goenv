@@ -1,0 +1,119 @@
+config:
+    custom: aoeu
+
+web:
+    port: 3367
+    cookie_domain: dadadomain
+    shard: 17
+    
+amqp:
+    amqp:
+        user: uhe
+        pass: roh
+        host: hih
+        port: 870
+    custom:
+        user: rtn
+        pass: kbo
+        host: aar
+        port: 473
+
+postgres:
+    postgres:
+        user: ter
+        host: hor
+        db: 41
+    custom:
+        user: orr
+        host: obk
+        db: 11
+
+redis:
+    redis:
+        host: ecr
+        port: 340
+        db: 16
+    custom:
+        host: ruo
+        port: 114
+        db: 81
+
+
+_development:
+    custom: aoeu
+    log_file: ./log/server.log
+    port: 3367
+    cookie_domain: dadadomain
+    shard: 17
+    # local for sid generation
+    sid_redis:
+        db: 1
+        port: 6379
+    # fingerprinting etc.
+    redis:
+        host: localhost
+        db: 1
+        port: 6379
+    amqp:
+        user: guest
+        pass: guest
+        host: localhost
+        port: 5672
+
+testing:
+    log_file: ./log/server.log
+    port: 6711
+    cookie_domain: localhost
+    shard: 1
+    redis:
+        host: localhost
+        db: 1
+        port: 6379
+    master_redis:
+        host: localhost
+        db: 1
+        port: 6379
+    amqp:
+        user: guest
+        pass: guest
+        host: localhost
+        port: 5674
+
+staging:
+    log_file: ./log/server.log
+    port: 8080
+    cookie_domain: localhost
+    shard: 1
+    redis:
+        host: localhost
+        db: 1
+        port: 6379
+    master_redis:
+        host: localhost
+        db: 1
+        port: 6379
+    amqp:
+        user: user
+        pass: pass
+        host: localhost
+        port: 5672
+
+production:
+    log_file: ./log/server.log
+    port: 8080
+    cookie_domain: localhost
+    shard: 1
+    redis:
+        host: localhost
+        db: 1
+        port: 6379
+    master_redis:
+        host: 1.redis.adjust.io
+        db: 1
+        port: 6379
+    amqp:
+        user: user
+        pass: pass
+        host: localhost
+        port: 5672
+

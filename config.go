@@ -12,15 +12,29 @@ var (
 )
 
 func init() {
-	environment = getEnv("GO_ENV", "development")
-	configFile := getEnv("GO_CONFIG", "./config/config.yaml")
-
-	config = yaml.ConfigFile(configFile)
-	logFile := Get("log_file", "./log/server.log")
-	setLogFile(logFile)
+	SetEnvironment(getEnv("GO_ENV", "development"))
+	SetConfigFile(getEnv("GO_CONFIG", "./config/config.yaml"))
+	SetLogFile(Get("log_file", "./log/server.log"))
 
 	exitHandler = &StandardHandler{}
 	startSignalCatcher()
+}
+
+func SetEnvironment(env string) {
+	environment = env
+}
+
+func SetConfigFile(fileName string) {
+	config = yaml.ConfigFile(fileName)
+}
+
+func SetLogFile(fileName string) {
+	logFile, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
+	if err != nil {
+		panic("Failed to open logFile: " + fileName)
+	}
+	log.SetOutput(logFile)
+	log.SetFlags(5)
 }
 
 // get value from current environment
@@ -39,13 +53,4 @@ func getEnv(key, defaultValue string) string {
 	}
 
 	return value
-}
-
-func setLogFile(fileName string) {
-	logFile, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
-	if err != nil {
-		panic("Failed to open logFile: " + fileName)
-	}
-	log.SetOutput(logFile)
-	log.SetFlags(5)
 }
