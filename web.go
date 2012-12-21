@@ -21,6 +21,6 @@ func GetShard() int64 {
 	if err != nil || shard == 0 {
 		log.Panic("Invalid shard: \"" + shardst + "\"")
 	}
-	log.Println("Selected shard: " + shard)
+	log.Printf("Selected shard: %d", shard)
 	return shard
 }
