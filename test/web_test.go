@@ -7,7 +7,7 @@ import (
 )
 
 func TestGetPort(t *testing.T) {
-	goenv.SetConfigFile("./config/config.yaml")
+	goenv.SetConfigFile("./config/config.yml")
 	goenv.SetEnvironment("web")
 	if goenv.GetPort() != "3367" {
 		t.Error("port != 3367")
@@ -15,7 +15,7 @@ func TestGetPort(t *testing.T) {
 }
 
 func TestGetPortNotFound(t *testing.T) {
-	goenv.SetConfigFile("./config/config.yaml")
+	goenv.SetConfigFile("./config/config.yml")
 	goenv.SetEnvironment("nonexistent")
 	if goenv.GetPort() != "8080" {
 		t.Error("port != 8080")
@@ -23,7 +23,7 @@ func TestGetPortNotFound(t *testing.T) {
 }
 
 func TestGetCookieDomain(t *testing.T) {
-	goenv.SetConfigFile("./config/config.yaml")
+	goenv.SetConfigFile("./config/config.yml")
 	goenv.SetEnvironment("web")
 	if goenv.GetCookieDomain() != "dadadomain" {
 		t.Error("cookie_domain != dadadomain")
@@ -31,7 +31,7 @@ func TestGetCookieDomain(t *testing.T) {
 }
 
 func TestGetCookieDomainNotFound(t *testing.T) {
-	goenv.SetConfigFile("./config/config.yaml")
+	goenv.SetConfigFile("./config/config.yml")
 	goenv.SetEnvironment("nonexistent")
 	if goenv.GetCookieDomain() != "localhost" {
 		t.Error("cookie_domain != localhost")

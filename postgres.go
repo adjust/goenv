@@ -15,7 +15,7 @@ func GetNamedPostgres(name string) string {
 	dbst := Get(name+".db", "")
 
 	if dbst == "" {
-		log.Panic("Missing value in config.yaml: " + environment + "." + name + ".db")
+		log.Panic("Missing value in config.yml: " + environment + "." + name + ".db")
 	}
 
 	result := "user=" + user + " dbname=" + dbst + " sslmode=disable host=" + host

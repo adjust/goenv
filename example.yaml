@@ -3,7 +3,7 @@
 # default: development
 environment: GO_ENV
 
-# default: ./config/config.yaml
+# default: ./config/config.yml
 config_file: GO_CONFIG
 
 # environments

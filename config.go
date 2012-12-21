@@ -13,7 +13,7 @@ var (
 
 func init() {
 	SetEnvironment(getEnv("GO_ENV", "development"))
-	SetConfigFile(getEnv("GO_CONFIG", "./config/config.yaml"))
+	SetConfigFile(getEnv("GO_CONFIG", "./config/config.yml"))
 	SetLogFile(Get("log_file", "./log/server.log"))
 
 	exitHandler = &StandardHandler{}
