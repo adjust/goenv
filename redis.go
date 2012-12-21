@@ -18,5 +18,6 @@ func GetNamedRedis(name string) (host, port string, db int) {
 	if err != nil {
 		log.Panic(name + ": Failed to convert to int: " + dbs)
 	}
+
 	return
 }
