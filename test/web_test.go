@@ -2,6 +2,7 @@ package goenv
 
 import (
 	"github.com/adeven/goenv"
+	"os"
 	"testing"
 )
 
@@ -38,8 +39,7 @@ func TestGetCookieDomainNotFound(t *testing.T) {
 }
 
 func TestGetShard(t *testing.T) {
-	goenv.SetConfigFile("./config/config.yaml")
-	goenv.SetEnvironment("web")
+	os.Setenv("GO_SHARD", "17")
 	if goenv.GetShard() != 17 {
 		t.Error("shard != 17")
 	}
@@ -50,8 +50,7 @@ func TestGetShardNotFound(t *testing.T) {
 		recover()
 	}()
 
-	goenv.SetConfigFile("./config/config.yaml")
-	goenv.SetEnvironment("nonexistent")
+	os.Setenv("GO_SHARD", "")
 	goenv.GetShard()
 	t.Error("GetShard didn't panic")
 }

@@ -16,10 +16,11 @@ func GetCookieDomain() string {
 }
 
 func GetShard() int64 {
-	shardst := Get("shard", "0")
+	shardst := getEnv("GO_SHARD", "")
 	shard, err := strconv.ParseInt(shardst, 10, 64)
 	if err != nil || shard == 0 {
 		log.Panic("Invalid shard: \"" + shardst + "\"")
 	}
+	log.Println("Selected shard: " + shard)
 	return shard
 }

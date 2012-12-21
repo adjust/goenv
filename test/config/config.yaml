@@ -7,7 +7,6 @@ custom:
 web:
     port: 3367
     cookie_domain: dadadomain
-    shard: 17
 
 amqp:
     amqp:

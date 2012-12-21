@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+// TODO: add tests that set environment variables instead of calling the setters
+
 func TestSetEnvironment(t *testing.T) {
 	goenv.SetConfigFile("./config/config.yaml")
 	goenv.SetEnvironment("custom")
