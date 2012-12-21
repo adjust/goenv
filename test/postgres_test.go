@@ -14,11 +14,12 @@ func TestGetPostgres(t *testing.T) {
 }
 
 func TestGetPostgresNotFound(t *testing.T) {
+	defer func() { recover() }()
+
 	goenv.SetConfigFile("./config/config.yaml")
 	goenv.SetEnvironment("nonexistent")
-	if goenv.GetPostgres() != "user=postgres dbname=0 sslmode=disable host=localhost" {
-		t.Error("postgres != user=postgres dbname=0 sslmode=disable host=localhost")
-	}
+	goenv.GetPostgres()
+	t.Error("GetPostgres didn't panic")
 }
 
 func TestGetNamedPostgres(t *testing.T) {
@@ -30,9 +31,10 @@ func TestGetNamedPostgres(t *testing.T) {
 }
 
 func TestGetNamedPostgresNotFound(t *testing.T) {
+	defer func() { recover() }()
+
 	goenv.SetConfigFile("./config/config.yaml")
 	goenv.SetEnvironment("postgres")
-	if goenv.GetNamedPostgres("non") != "user=postgres dbname=0 sslmode=disable host=localhost" {
-		t.Error("nonexistent != user=postgres dbname=0 sslmode=disable host=localhost")
-	}
+	goenv.GetNamedPostgres("non")
+	t.Error("GetNamedPostgres didn't panic")
 }

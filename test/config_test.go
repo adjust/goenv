@@ -30,9 +30,7 @@ func TestSetConfigFile(t *testing.T) {
 }
 
 func TestSetConfigFileNotFound(t *testing.T) {
-	defer func() {
-		recover()
-	}()
+	defer func() { recover() }()
 
 	goenv.SetConfigFile("nonexistent")
 	t.Error("SetConfigFile didn't panic")

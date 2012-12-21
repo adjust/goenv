@@ -1,9 +1,5 @@
 package goenv
 
-import (
-	"log"
-)
-
 func GetAmqp() string {
 	result := GetNamedAmqp("amqp")
 	return result

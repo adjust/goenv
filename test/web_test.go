@@ -46,13 +46,12 @@ func TestGetShard(t *testing.T) {
 }
 
 func TestGetShardNotFound(t *testing.T) {
-	goenv.SetConfigFile("./config/config.yaml")
-	goenv.SetEnvironment("nonexistent")
-
 	defer func() {
 		recover()
 	}()
 
+	goenv.SetConfigFile("./config/config.yaml")
+	goenv.SetEnvironment("nonexistent")
 	goenv.GetShard()
 	t.Error("GetShard didn't panic")
 }
