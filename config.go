@@ -55,7 +55,24 @@ func GetInt(spec string, defaultValue int) int {
 
 	val, err := strconv.Atoi(str)
 	if err != nil {
-		log.Panic("goenv failed atoi", spec, str)
+		log.Panic("goenv GetInt failed Atoi", environment, spec, str)
+	}
+	return val
+}
+
+func Require(spec string) string {
+	value := Get(spec, "")
+	if value == "" {
+		log.Panicf("goenv Require couldn't find %s.%s", environment, spec)
+	}
+	return value
+}
+
+func RequireInt(spec string) int {
+	str := Require(spec)
+	val, err := strconv.Atoi(str)
+	if err != nil {
+		log.Panic("goenv RequireInt failed Atoi", environment, spec, str)
 	}
 	return val
 }
