@@ -1,6 +1,7 @@
 package goenv
 
 import (
+	"fmt"
 	"log"
 )
 
@@ -15,9 +16,9 @@ func GetNamedPostgres(name string) string {
 	dbst := Get(name+".db", "")
 
 	if dbst == "" {
-		log.Panic("Missing value in config.yml: " + environment + "." + name + ".db")
+		log.Panicf("Missing value in config.yml: %s.%s.db", environment, name)
 	}
 
-	result := "user=" + user + " dbname=" + dbst + " sslmode=disable host=" + host
+	result := fmt.Sprintf("user=%s dbname=%s sslmode=disable host=%s", user, dbst, host)
 	return result
 }
