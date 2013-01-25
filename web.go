@@ -19,8 +19,7 @@ func GetShard() int64 {
 	shardst := getEnv("GO_SHARD", "")
 	shard, err := strconv.ParseInt(shardst, 10, 64)
 	if err != nil || shard == 0 {
-		log.Panic("Invalid shard: \"" + shardst + "\"")
+		log.Panic("invalid shard: \"" + shardst + "\"")
 	}
-	log.Printf("Selected shard: %d", shard)
 	return shard
 }

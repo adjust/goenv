@@ -4,6 +4,7 @@ import (
 	"github.com/adeven/go-gypsy/yaml"
 	"log"
 	"os"
+	"strconv"
 )
 
 var (
@@ -44,6 +45,36 @@ func Get(spec, defaultValue string) string {
 		value = defaultValue
 	}
 	return value
+}
+
+func GetInt(spec string, defaultValue int) int {
+	str := Get(spec, "")
+	if str == "" {
+		return defaultValue
+	}
+
+	val, err := strconv.Atoi(str)
+	if err != nil {
+		log.Panic("goenv GetInt failed Atoi", environment, spec, str)
+	}
+	return val
+}
+
+func Require(spec string) string {
+	value := Get(spec, "")
+	if value == "" {
+		log.Panicf("goenv Require couldn't find %s.%s", environment, spec)
+	}
+	return value
+}
+
+func RequireInt(spec string) int {
+	str := Require(spec)
+	val, err := strconv.Atoi(str)
+	if err != nil {
+		log.Panic("goenv RequireInt failed Atoi", environment, spec, str)
+	}
+	return val
 }
 
 func getEnv(key, defaultValue string) string {
