@@ -6,8 +6,7 @@ import (
 )
 
 func TestGetPostgres(t *testing.T) {
-	goenv.SetConfigFile("./config/config.yml")
-	goenv.SetEnvironment("postgres")
+	goenv := goenv.NewGoenv("./config/config.yml", "postgres", "")
 	if goenv.GetPostgres() != "user=ter dbname=41 sslmode=disable host=hor" {
 		t.Error("postgres != user=ter dbname=41 sslmode=disable host=hor")
 	}
@@ -16,15 +15,13 @@ func TestGetPostgres(t *testing.T) {
 func TestGetPostgresNotFound(t *testing.T) {
 	defer func() { recover() }()
 
-	goenv.SetConfigFile("./config/config.yml")
-	goenv.SetEnvironment("nonexistent")
+	goenv := goenv.NewGoenv("./config/config.yml", "nonexistent", "")
 	goenv.GetPostgres()
 	t.Error("GetPostgres didn't panic")
 }
 
 func TestGetNamedPostgres(t *testing.T) {
-	goenv.SetConfigFile("./config/config.yml")
-	goenv.SetEnvironment("postgres")
+	goenv := goenv.NewGoenv("./config/config.yml", "postgres", "")
 	if goenv.GetNamedPostgres("custom") != "user=orr dbname=11 sslmode=disable host=obk" {
 		t.Error("custom != user=orr dbname=11 sslmode=disable host=obk")
 	}
@@ -33,8 +30,7 @@ func TestGetNamedPostgres(t *testing.T) {
 func TestGetNamedPostgresNotFound(t *testing.T) {
 	defer func() { recover() }()
 
-	goenv.SetConfigFile("./config/config.yml")
-	goenv.SetEnvironment("postgres")
+	goenv := goenv.NewGoenv("./config/config.yml", "postgres", "")
 	goenv.GetNamedPostgres("non")
 	t.Error("GetNamedPostgres didn't panic")
 }
