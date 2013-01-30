@@ -1,13 +1,13 @@
 package goenv
 
-func GetRedis() (host, port string, db int) {
-	return GetNamedRedis("redis")
+func (goenv *Goenv) GetRedis() (host, port string, db int) {
+	return goenv.GetNamedRedis("redis")
 }
 
-func GetNamedRedis(name string) (host, port string, db int) {
-	host = Get(name+".host", "localhost")
-	port = Get(name+".port", "6379")
-	db = GetInt(name+".db", 0)
+func (goenv *Goenv) GetNamedRedis(name string) (host, port string, db int) {
+	host = goenv.Get(name+".host", "localhost")
+	port = goenv.Get(name+".port", "6379")
+	db = goenv.GetInt(name+".db", 0)
 
 	return
 }

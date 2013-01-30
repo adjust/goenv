@@ -5,17 +5,17 @@ import (
 	"strconv"
 )
 
-func GetPort() string {
-	port := Get("port", "8080")
+func (goenv *Goenv) GetPort() string {
+	port := goenv.Get("port", "8080")
 	return port
 }
 
-func GetCookieDomain() string {
-	domain := Get("cookie_domain", "localhost")
+func (goenv *Goenv) GetCookieDomain() string {
+	domain := goenv.Get("cookie_domain", "localhost")
 	return domain
 }
 
-func GetShard() int64 {
+func (goenv *Goenv) GetShard() int64 {
 	shardst := getEnv("GO_SHARD", "")
 	shard, err := strconv.ParseInt(shardst, 10, 64)
 	if err != nil || shard == 0 {

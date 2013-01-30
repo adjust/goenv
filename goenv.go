@@ -7,29 +7,32 @@ import (
 	"strconv"
 )
 
-var (
-	config      *yaml.File
+type Goenv struct {
+	configFile  *yaml.File
 	environment string
-)
-
-func init() {
-	SetEnvironment(getEnv("GO_ENV", "development"))
-	SetConfigFile(getEnv("GO_CONFIG", "./config/config.yml"))
-	SetLogFile(Get("log_file", "./log/server.log"))
-
-	exitHandler = &StandardHandler{}
-	startSignalCatcher()
 }
 
-func SetEnvironment(env string) {
-	environment = env
+func NewGoenv(configFile, environment, logFile string) *Goenv {
+	goenv := &Goenv{
+		configFile:  yaml.ConfigFile(configFile),
+		environment: environment,
+	}
+
+	if logFile == "" {
+		logFile = goenv.Get("log_file", "./log/server.log")
+	}
+	setLogFile(logFile)
+
+	return goenv
 }
 
-func SetConfigFile(fileName string) {
-	config = yaml.ConfigFile(fileName)
+func DefaultGoenv() *Goenv {
+	environment := getEnv("GO_ENV", "development")
+	configFile := getEnv("GO_CONFIG", "./config/config.yml")
+	return NewGoenv(configFile, environment, "")
 }
 
-func SetLogFile(fileName string) {
+func setLogFile(fileName string) {
 	logFile, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
 	if err != nil {
 		panic("Failed to open logFile: " + fileName)
@@ -39,40 +42,40 @@ func SetLogFile(fileName string) {
 }
 
 // get value from current environment
-func Get(spec, defaultValue string) string {
-	value, err := config.Get(environment + "." + spec)
+func (goenv *Goenv) Get(spec, defaultValue string) string {
+	value, err := goenv.configFile.Get(goenv.environment + "." + spec)
 	if err != nil {
 		value = defaultValue
 	}
 	return value
 }
 
-func GetInt(spec string, defaultValue int) int {
-	str := Get(spec, "")
+func (goenv *Goenv) GetInt(spec string, defaultValue int) int {
+	str := goenv.Get(spec, "")
 	if str == "" {
 		return defaultValue
 	}
 
 	val, err := strconv.Atoi(str)
 	if err != nil {
-		log.Panic("goenv GetInt failed Atoi", environment, spec, str)
+		log.Panic("goenv GetInt failed Atoi", goenv.environment, spec, str)
 	}
 	return val
 }
 
-func Require(spec string) string {
-	value := Get(spec, "")
+func (goenv *Goenv) Require(spec string) string {
+	value := goenv.Get(spec, "")
 	if value == "" {
-		log.Panicf("goenv Require couldn't find %s.%s", environment, spec)
+		log.Panicf("goenv Require couldn't find %s.%s", goenv.environment, spec)
 	}
 	return value
 }
 
-func RequireInt(spec string) int {
-	str := Require(spec)
+func (goenv *Goenv) RequireInt(spec string) int {
+	str := goenv.Require(spec)
 	val, err := strconv.Atoi(str)
 	if err != nil {
-		log.Panic("goenv RequireInt failed Atoi", environment, spec, str)
+		log.Panic("goenv RequireInt failed Atoi", goenv.environment, spec, str)
 	}
 	return val
 }
