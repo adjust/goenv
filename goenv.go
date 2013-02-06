@@ -13,6 +13,10 @@ type Goenv struct {
 }
 
 func NewGoenv(configFile, environment, logFile string) *Goenv {
+	if environment == "" {
+		environment = "development"
+	}
+
 	goenv := &Goenv{
 		configFile:  yaml.ConfigFile(configFile),
 		environment: environment,
@@ -25,6 +29,7 @@ func NewGoenv(configFile, environment, logFile string) *Goenv {
 	if logFile == "" {
 		logFile = goenv.Get("log_file", "./log/server.log")
 	}
+	setLogFile(logFile)
 
 	return goenv
 }
