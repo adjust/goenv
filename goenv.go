@@ -18,10 +18,13 @@ func NewGoenv(configFile, environment, logFile string) *Goenv {
 		environment: environment,
 	}
 
+	if goenv.configFile == nil {
+		panic("goenv failed to open configFile: " + configFile)
+	}
+
 	if logFile == "" {
 		logFile = goenv.Get("log_file", "./log/server.log")
 	}
-	setLogFile(logFile)
 
 	return goenv
 }
@@ -33,9 +36,13 @@ func DefaultGoenv() *Goenv {
 }
 
 func setLogFile(fileName string) {
+	if fileName == "nil" {
+		return
+	}
+
 	logFile, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
 	if err != nil {
-		panic("Failed to open logFile: " + fileName)
+		panic("goenv failed to open logFile: " + fileName)
 	}
 	log.SetOutput(logFile)
 	log.SetFlags(5)
