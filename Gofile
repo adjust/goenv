@@ -1,0 +1,11 @@
+{
+    "env" : [
+        {
+            "name" : "production",
+            "packages": [
+                { "name" : "github.com/adeven/go-gypsy", "branch" : "master" }
+            ]
+        }
+   ]
+}
+
