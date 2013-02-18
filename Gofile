@@ -5,7 +5,14 @@
             "packages": [
                 { "name" : "github.com/adeven/go-gypsy", "branch" : "master" }
             ]
+        },
+        {
+            "name" : "staging",
+            "packages": [
+                { "name" : "github.com/adeven/go-gypsy", "branch" : "master" }
+            ]
         }
+
    ]
 }
 
