@@ -11,8 +11,6 @@ config_file: GO_CONFIG
 development:
     log_file: ./log/server.log
     port: 8080
-    cookie_domain: localhost
-    shard: 1
     # local for sid generation
     sid_redis:
         db: 1
@@ -31,8 +29,6 @@ development:
 testing:
     log_file: ./log/server.log
     port: 8080
-    cookie_domain: localhost
-    shard: 1
     redis:
         host: localhost
         db: 1
@@ -50,8 +46,6 @@ testing:
 staging:
     log_file: ./log/server.log
     port: 8080
-    cookie_domain: localhost
-    shard: 1
     redis:
         host: localhost
         db: 1
@@ -69,8 +63,6 @@ staging:
 production:
     log_file: ./log/server.log
     port: 8080
-    cookie_domain: localhost
-    shard: 1
     redis:
         host: localhost
         db: 1
