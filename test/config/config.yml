@@ -23,6 +23,7 @@ postgres:
     postgres:
         user: ter
         host: hor
+        port: 4711
         db: 41
     custom:
         user: orr
