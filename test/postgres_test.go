@@ -7,8 +7,8 @@ import (
 
 func TestGetPostgres(t *testing.T) {
 	goenv := goenv.NewGoenv("./config/config.yml", "postgres", "nil")
-	if goenv.GetPostgres() != "user=ter dbname=41 sslmode=disable host=hor" {
-		t.Error("postgres != user=ter dbname=41 sslmode=disable host=hor")
+	if goenv.GetPostgres() != "user=ter dbname=41 sslmode=disable host=hor port=4711" {
+		t.Error("postgres != user=ter dbname=41 sslmode=disable host=hor port=4711")
 	}
 }
 
@@ -22,8 +22,8 @@ func TestGetPostgresNotFound(t *testing.T) {
 
 func TestGetNamedPostgres(t *testing.T) {
 	goenv := goenv.NewGoenv("./config/config.yml", "postgres", "nil")
-	if goenv.GetNamedPostgres("custom") != "user=orr dbname=11 sslmode=disable host=obk" {
-		t.Error("custom != user=orr dbname=11 sslmode=disable host=obk")
+	if goenv.GetNamedPostgres("custom") != "user=orr dbname=11 sslmode=disable host=obk port=5432" {
+		t.Error("custom != user=orr dbname=11 sslmode=disable host=obk port=5432")
 	}
 }
 
