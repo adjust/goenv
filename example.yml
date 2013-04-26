@@ -25,6 +25,9 @@ development:
         pass: guest
         host: localhost
         port: 5672
+    mailFrom: testmail@adeven.com
+    mailPasswd: SuperSecret13
+    mailServer: smtp.example.com
 
 testing:
     log_file: ./log/server.log
@@ -42,6 +45,9 @@ testing:
         pass: guest
         host: localhost
         port: 5674
+    mailFrom: testmail@adeven.com
+    mailPasswd: SuperSecret13
+    mailServer: smtp.example.com
 
 staging:
     log_file: ./log/server.log
@@ -59,6 +65,9 @@ staging:
         pass: pass
         host: localhost
         port: 5672
+    mailFrom: testmail@adeven.com
+    mailPasswd: SuperSecret13
+    mailServer: smtp.example.com
 
 production:
     log_file: ./log/server.log
@@ -76,4 +85,7 @@ production:
         pass: pass
         host: localhost
         port: 5672
+    mailFrom: testmail@adeven.com
+    mailPasswd: SuperSecret13
+    mailServer: smtp.example.com
 
