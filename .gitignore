@@ -1,2 +1,6 @@
 /test/log/server.log
 tags
+
+.go/*
+
+Gofile.lock

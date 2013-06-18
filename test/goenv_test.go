@@ -47,4 +47,11 @@ func TestGetNotFound(t *testing.T) {
 	}
 }
 
+func TestGetEnvName(t *testing.T) {
+	goenv := goenv.NewGoenv("./config/config.yml", "", "nil")
+	if goenv.GetEnvName() != "development" {
+		t.Error("wrong environment name returned")
+	}
+}
+
 // TODO: test new functions
