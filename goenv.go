@@ -92,6 +92,10 @@ func (goenv *Goenv) RequireInt(spec string) int {
 	return val
 }
 
+func (goenv *Goenv) GetEnvName() string {
+	return goenv.environment
+}
+
 func getEnv(key, defaultValue string) string {
 	value := os.Getenv(key)
 	if value == "" {
