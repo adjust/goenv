@@ -4,6 +4,7 @@ import (
 	"github.com/adeven/go-gypsy/yaml"
 	"log"
 	"os"
+	"path"
 	"strconv"
 )
 
@@ -29,6 +30,7 @@ func NewGoenv(configFile, environment, logFile string) *Goenv {
 	if logFile == "" {
 		logFile = goenv.Get("log_file", "./log/server.log")
 	}
+	os.MkdirAll(path.Dir(logFile), 0755)
 	setLogFile(logFile)
 
 	return goenv
