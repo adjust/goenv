@@ -44,7 +44,7 @@ func DefaultGoenv() *Goenv {
 
 func TestGoenv() *Goenv {
 	environment := getEnv("GO_ENV", "testing")
-	configFile := getEnv("GO_CONFIG", "./config.yml")
+	configFile := getEnv("GO_CONFIG", "../run/config.yml")
 	return NewGoenv(configFile, environment, "")
 }
 
