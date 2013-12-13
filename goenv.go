@@ -29,15 +29,21 @@ func NewGoenv(configFile, environment, logFile string) *Goenv {
 
 	if logFile == "" {
 		logFile = goenv.Get("log_file", "./log/server.log")
+		os.MkdirAll(path.Dir(logFile), 0755)
+		setLogFile(logFile)
 	}
-	os.MkdirAll(path.Dir(logFile), 0755)
-	setLogFile(logFile)
 
 	return goenv
 }
 
 func DefaultGoenv() *Goenv {
 	environment := getEnv("GO_ENV", "development")
+	configFile := getEnv("GO_CONFIG", "./config.yml")
+	return NewGoenv(configFile, environment, "")
+}
+
+func TestGoenv() *Goenv {
+	environment := getEnv("GO_ENV", "testing")
 	configFile := getEnv("GO_CONFIG", "./config.yml")
 	return NewGoenv(configFile, environment, "")
 }
