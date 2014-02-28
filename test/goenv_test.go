@@ -1,7 +1,7 @@
 package goenv
 
 import (
-	"github.com/adeven/goenv"
+	"github.com/adjust/goenv"
 	"testing"
 )
 
