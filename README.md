@@ -11,12 +11,12 @@ This is a nifty little package to help reduce the boilerplate code of our go app
 ##How to use
 Get it
 
-    go get github.com/adeven/goenv
+    go get github.com/adjust/goenv
 
 ###General
 Import it
 
-    import github.com/adeven/goenv
+    import github.com/adjust/goenv
 
 Use it
 
@@ -44,8 +44,8 @@ Easy: Just fork and create a new file (good place is to start with a `postgres.g
 
 This Software is licensed under the MIT License.
 
-Copyright (c) 2012 adeven GmbH,
-http://www.adeven.com
+Copyright (c) 2012 adjust GmbH,
+http://www.adjust.com
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

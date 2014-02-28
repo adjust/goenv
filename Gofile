@@ -3,8 +3,8 @@
         {
             "name" : "production",
             "packages": [
-                { "name" : "github.com/adeven/go-gypsy", "branch" : "master" },
-                { "name" : "github.com/adeven/goenv", "branch" : "." }
+                { "name" : "github.com/adjust/go-gypsy", "branch" : "master" },
+                { "name" : "github.com/adjust/goenv", "branch" : "." }
             ]
         }
    ],

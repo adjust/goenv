@@ -1,7 +1,7 @@
 package goenv
 
 import (
-	"github.com/adeven/go-gypsy/yaml"
+	"github.com/adjust/go-gypsy/yaml"
 	"log"
 	"os"
 	"path"
