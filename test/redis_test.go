@@ -16,8 +16,8 @@ func TestGetRedis(t *testing.T) {
 func TestGetRedisNotFound(t *testing.T) {
 	goenv := goenv.NewGoenv("./config/config.yml", "nonexistent", "nil")
 	host, port, db := goenv.GetRedis()
-	if host != "localhost" || port != "6379" || db != 0 {
-		t.Error("redis != localhost, 6379, 0")
+	if host != "localhost" || port != "6379" || db != -1 {
+		t.Error("redis != localhost, 6379, -1")
 	}
 }
 
@@ -32,7 +32,7 @@ func TestGetNamedRedis(t *testing.T) {
 func TestGetNamedRedisNotFound(t *testing.T) {
 	goenv := goenv.NewGoenv("./config/config.yml", "redis", "nil")
 	host, port, db := goenv.GetNamedRedis("nonexistent")
-	if host != "localhost" || port != "6379" || db != 0 {
-		t.Error("nonexistent != localhost, 6379, 0")
+	if host != "localhost" || port != "6379" || db != -1 {
+		t.Error("nonexistent != localhost, 6379, -1")
 	}
 }
