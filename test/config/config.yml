@@ -39,3 +39,8 @@ redis:
         host: ruo
         port: 114
         db: 81
+
+graphite:
+    graphite:
+        host: ghost
+        port: 4177
