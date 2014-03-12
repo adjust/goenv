@@ -16,7 +16,7 @@ func TestGetGraphite(t *testing.T) {
 func TestGetGraphiteNotFound(t *testing.T) {
 	goenv := goenv.NewGoenv("./config/config.yml", "nonexistent", "nil")
 	host, port := goenv.GetGraphite()
-	if host != "localhost" || port != 2003 {
-		t.Error("graphite != ghost, 2003")
+	if host != "" || port != 2003 {
+		t.Error("graphite != '', 2003")
 	}
 }
