@@ -1,5 +1,7 @@
 config:
     custom: aoeu
+    duration: 10s
+    number: 1234
 
 custom:
     port: 6711
