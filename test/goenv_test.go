@@ -3,6 +3,7 @@ package goenv
 import (
 	"github.com/adjust/goenv"
 	"testing"
+	"time"
 )
 
 func TestSetEnvironment(t *testing.T) {
@@ -38,6 +39,27 @@ func TestGet(t *testing.T) {
 	if goenv.Get("custom", "") != "aoeu" {
 		t.Error("custom != aoeu")
 	}
+}
+
+func TestGetInt(t *testing.T) {
+	goenv := goenv.NewGoenv("./config/config.yml", "config", "nil")
+	if goenv.GetInt("number", 1245) != 1234 {
+		t.Error("number != 1234")
+	}
+}
+
+func TestGetDuration(t *testing.T) {
+	goenv := goenv.NewGoenv("./config/config.yml", "config", "nil")
+	if goenv.GetDuration("duration", "30s") != time.Duration(10*time.Second) {
+		t.Error("duration != 10s")
+	}
+}
+
+func TestRequire(t *testing.T) {
+	defer func() { recover() }()
+	goenv := goenv.NewGoenv("./config/config.yml", "config", "nil")
+	goenv.Require("dingdong")
+	t.Error("Require didn't panic")
 }
 
 func TestGetNotFound(t *testing.T) {

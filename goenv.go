@@ -6,6 +6,7 @@ import (
 	"os"
 	"path"
 	"strconv"
+	"time"
 )
 
 type Goenv struct {
@@ -83,6 +84,18 @@ func (goenv *Goenv) GetInt(spec string, defaultValue int) int {
 	return val
 }
 
+func (goenv *Goenv) GetDuration(spec string, defaultValue string) time.Duration {
+	str := goenv.Get(spec, "")
+	if str == "" {
+		str = defaultValue
+	}
+	duration, err := time.ParseDuration(str)
+	if err != nil {
+		log.Panic("goenv GetDuration failed ParseDuration", goenv.environment, spec, str)
+	}
+	return duration
+}
+
 func (goenv *Goenv) Require(spec string) string {
 	value := goenv.Get(spec, "")
 	if value == "" {
@@ -98,6 +111,15 @@ func (goenv *Goenv) RequireInt(spec string) int {
 		log.Panic("goenv RequireInt failed Atoi", goenv.environment, spec, str)
 	}
 	return val
+}
+
+func (goenv *Goenv) RequireDuration(spec string) time.Duration {
+	str := goenv.Require(spec)
+	duration, err := time.ParseDuration(str)
+	if err != nil {
+		log.Panic("goenv RequireDuration failed ParseDuration", goenv.environment, spec, str)
+	}
+	return duration
 }
 
 func (goenv *Goenv) GetEnvName() string {
