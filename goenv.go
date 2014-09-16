@@ -38,14 +38,14 @@ func NewGoenv(configFile, environment, logFile string) *Goenv {
 }
 
 func DefaultGoenv() *Goenv {
-	environment := getEnv("GO_ENV", "development")
-	configFile := getEnv("GO_CONFIG", "./config.yml")
+	environment := GetEnv("GO_ENV", "development")
+	configFile := GetEnv("GO_CONFIG", "./config.yml")
 	return NewGoenv(configFile, environment, "")
 }
 
 func TestGoenv() *Goenv {
-	environment := getEnv("GO_ENV", "testing")
-	configFile := getEnv("GO_CONFIG", "../run/config.yml")
+	environment := GetEnv("GO_ENV", "testing")
+	configFile := GetEnv("GO_CONFIG", "../run/config.yml")
 	return NewGoenv(configFile, environment, "")
 }
 
@@ -126,7 +126,7 @@ func (goenv *Goenv) GetEnvName() string {
 	return goenv.environment
 }
 
-func getEnv(key, defaultValue string) string {
+func GetEnv(key, defaultValue string) string {
 	value := os.Getenv(key)
 	if value == "" {
 		value = defaultValue
