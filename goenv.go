@@ -1,6 +1,7 @@
 package goenv
 
 import (
+	"bytes"
 	"github.com/adjust/go-gypsy/yaml"
 	"log"
 	"os"
@@ -30,8 +31,9 @@ func NewGoenv(configFile, environment, logFile string) *Goenv {
 
 	if logFile == "" {
 		logFile = goenv.Get("log_file", "./log/server.log")
+		bufferedLog := goenv.GetInt("buffered_log", 0)
 		os.MkdirAll(path.Dir(logFile), 0755)
-		setLogFile(logFile)
+		setLogFile(logFile, bufferedLog)
 	}
 
 	return goenv
@@ -49,17 +51,33 @@ func TestGoenv() *Goenv {
 	return NewGoenv(configFile, environment, "")
 }
 
-func setLogFile(fileName string) {
+func setLogFile(fileName string, bufferedLog int) {
 	if fileName == "nil" {
 		return
 	}
 
+	var buffer bytes.Buffer
 	logFile, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
 	if err != nil {
 		panic("goenv failed to open logFile: " + fileName)
 	}
-	log.SetOutput(logFile)
+
+	if bufferedLog == 1 {
+		log.SetOutput(&buffer)
+		go flushBufferToFile(&buffer, logFile)
+	} else {
+		log.SetOutput(logFile)
+	}
+
 	log.SetFlags(5)
+}
+
+func flushBufferToFile(buffer *bytes.Buffer, logFile *os.File) {
+	buffer.Grow(10 * 1024 * 1024)
+	for {
+		time.Sleep(500 * time.Millisecond)
+		buffer.WriteTo(logFile)
+	}
 }
 
 // get value from current environment
