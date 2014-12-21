@@ -4,6 +4,7 @@ import (
 	"github.com/adjust/redis"
 
 	"fmt"
+	"strings"
 )
 
 type RedisLogWriter struct {
@@ -11,17 +12,18 @@ type RedisLogWriter struct {
 	logName     string
 }
 
-func (goenv *Goenv) NewRedisLogWriter(logName string, poolSize int) *RedisLogWriter {
-	host, port, db := goenv.GetNamedRedis("redis_log")
+func (goenv *Goenv) NewRedisLogWriter(logName string) (logWriter *RedisLogWriter, err error) {
+	host, port, db := goenv.GetNamedRedis("redis_log_writer")
+	poolSize := goenv.GetInt("redis_log_writer.pool_size", 40)
 	network := "tcp"
 	addr := fmt.Sprintf("%s:%s", host, port)
 
-	if port == "" {
+	if strings.Contains(host, ".sock") {
 		network = "unix"
 		addr = host
 	}
 
-	logWriter := &RedisLogWriter{
+	logWriter = &RedisLogWriter{
 		logName: logName,
 	}
 
@@ -34,7 +36,12 @@ func (goenv *Goenv) NewRedisLogWriter(logName string, poolSize int) *RedisLogWri
 	}
 
 	logWriter.redisClient = redis.NewClient(options)
-	return logWriter
+	err = logWriter.redisClient.Ping().Err()
+	if err != nil {
+		return nil, err
+	}
+
+	return logWriter, nil
 }
 
 func (logWriter *RedisLogWriter) Write(p []byte) (n int, err error) {
