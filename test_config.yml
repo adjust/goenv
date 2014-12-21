@@ -52,6 +52,10 @@ redis:
         host: ruo
         port: 114
         db: 81
+    redis_log_writer:
+        host: /tmp/redis.sock
+        db: 1
+        pool_size: 100
 
 graphite:
     graphite:
