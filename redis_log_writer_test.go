@@ -11,7 +11,7 @@ func TestRedisLogWriter(t *testing.T) {
 		t.Fatalf("couldn't connect to redis for log writer test: %s", err)
 	}
 	writer.Write([]byte("dingdong"))
-	value, err := writer.redisClient.RPop("test123").Result()
+	value, err := writer.redisClient.LPop("test123").Result()
 	if err != nil {
 		t.Errorf("error reading log writer: %s", err)
 	}
