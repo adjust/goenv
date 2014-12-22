@@ -29,17 +29,56 @@ func NewGoenv(configFile, environment, logFile string) *Goenv {
 		panic("goenv failed to open configFile: " + configFile)
 	}
 
-	if logFile == "" {
-		logFile = goenv.Get("log_file", "./log/server.log")
-		os.MkdirAll(path.Dir(logFile), 0755)
-		setLogFile(logFile)
-	}
+	goenv.setLogFile(logFile)
 
 	return goenv
 }
 
-func (goenv *Goenv) SetLogger(writer io.Writer) {
-	log.SetOutput(writer)
+func DefaultGoenv() *Goenv {
+	environment := GetEnv("GO_ENV", "development")
+	configFile := GetEnv("GO_CONFIG", "./config.yml")
+	return NewGoenv(configFile, environment, "")
+}
+
+func TestGoenv() *Goenv {
+	environment := GetEnv("GO_ENV", "testing")
+	configFile := GetEnv("GO_CONFIG", "../run/config.yml")
+	return NewGoenv(configFile, environment, "")
+}
+
+func (goenv *Goenv) setLogFile(fileName string) {
+	if fileName == "nil" {
+		return
+	}
+
+	if fileName == "" {
+		fileName = goenv.Get("log_file", "./log/server.log")
+	}
+
+	var logFile io.Writer
+	var err error
+
+	useRedisLogWriter := goenv.GetBool("log_to_redis", false)
+
+	if useRedisLogWriter {
+		logFile, err = goenv.NewRedisLogWriter(fileName)
+
+	} else {
+		logFile, err = goenv.getFileHandler(fileName)
+	}
+
+	if err != nil {
+		panic("goenv failed to open logFile: " + fileName)
+	}
+
+	log.SetOutput(logFile)
+	log.SetFlags(5)
+}
+
+func (goenv *Goenv) getFileHandler(fileName string) (logFile *os.File, err error) {
+	os.MkdirAll(path.Dir(fileName), 0755)
+	logFile, err = os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
+	return
 }
 
 // get value from current environment
@@ -74,6 +113,24 @@ func (goenv *Goenv) GetDuration(spec string, defaultValue string) time.Duration 
 		log.Panic("goenv GetDuration failed ParseDuration", goenv.environment, spec, str)
 	}
 	return duration
+}
+
+func (goenv *Goenv) GetBool(spec string, defaultValue bool) bool {
+	str := goenv.Get(spec, "")
+	if str == "" {
+		return defaultValue
+	}
+
+	if str == "true" {
+		return true
+	}
+
+	if str == "false" {
+		return false
+	}
+
+	log.Panic("goenv GetBool failed to read value", goenv.environment, spec, str)
+	return false
 }
 
 func (goenv *Goenv) Require(spec string) string {
@@ -121,18 +178,6 @@ func GetEnv(key, defaultValue string) string {
 	}
 
 	return value
-}
-
-func DefaultGoenv() *Goenv {
-	environment := GetEnv("GO_ENV", "development")
-	configFile := GetEnv("GO_CONFIG", "./config.yml")
-	return NewGoenv(configFile, environment, "")
-}
-
-func TestGoenv() *Goenv {
-	environment := GetEnv("GO_ENV", "testing")
-	configFile := GetEnv("GO_CONFIG", "../run/config.yml")
-	return NewGoenv(configFile, environment, "")
 }
 
 func setLogFile(fileName string) {
