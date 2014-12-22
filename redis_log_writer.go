@@ -1,7 +1,7 @@
 package goenv
 
 import (
-	"github.com/adjust/redis"
+	redis "github.com/adjust/redis-latest-head"
 
 	"fmt"
 	"strings"
