@@ -45,7 +45,7 @@ func (goenv *Goenv) NewRedisLogWriter(logName string) (logWriter *RedisLogWriter
 }
 
 func (logWriter *RedisLogWriter) Write(p []byte) (n int, err error) {
-	err = logWriter.redisClient.LPush(logWriter.logName, string(p)).Err()
+	err = logWriter.redisClient.RPush(logWriter.logName, string(p)).Err()
 	if err != nil {
 		return 0, err
 	}
