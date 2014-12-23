@@ -4,7 +4,8 @@
             "name" : "production",
             "packages": [
                 { "name" : "github.com/adjust/go-gypsy", "branch" : "master" },
-                { "name" : "github.com/adjust/goenv", "branch" : "." }
+                { "name" : "github.com/adjust/goenv", "branch" : "." },
+                { "name" : "github.com/adjust/redis-latest-head", "branch" : "master" }
             ]
         }
    ],

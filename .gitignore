@@ -1,6 +1,6 @@
-/test/log/server.log
+./log/server.log
 tags
-
+*.log
 .go/*
 
 Gofile.lock

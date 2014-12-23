@@ -1,0 +1,8 @@
+config:
+    port: 4388
+    log_to_redis: true
+    log_file: test123.log
+    redis_log_writer:
+        host: /tmp/redis.sock
+        db: 1
+        pool_size: 100
