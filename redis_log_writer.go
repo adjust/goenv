@@ -8,8 +8,9 @@ import (
 )
 
 type RedisLogWriter struct {
-	redisClient *redis.Client
-	logName     string
+	redisClient  *redis.Client
+	logName      string
+	inputChannel chan string
 }
 
 func (goenv *Goenv) NewRedisLogWriter(logName string) (logWriter *RedisLogWriter, err error) {
@@ -40,14 +41,28 @@ func (goenv *Goenv) NewRedisLogWriter(logName string) (logWriter *RedisLogWriter
 	if err != nil {
 		return nil, err
 	}
+	logWriter.inputChannel = make(chan string, 10000)
+	logWriter.startConsumers(poolSize)
 
 	return logWriter, nil
 }
 
 func (logWriter *RedisLogWriter) Write(p []byte) (n int, err error) {
-	err = logWriter.redisClient.RPush(logWriter.logName, string(p)).Err()
-	if err != nil {
-		return 0, err
-	}
+	logWriter.inputChannel <- string(p)
 	return len(p), nil
+}
+
+func (logWriter *RedisLogWriter) startConsumers(poolSize int) {
+	for i := 0; i < poolSize; i++ {
+		go logWriter.startConsumer()
+	}
+}
+
+func (logWriter *RedisLogWriter) startConsumer() {
+	for logLine := range logWriter.inputChannel {
+		err := logWriter.redisClient.RPush(logWriter.logName, logLine).Err()
+		if err != nil {
+			panic(err)
+		}
+	}
 }
