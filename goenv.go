@@ -2,6 +2,7 @@ package goenv
 
 import (
 	"github.com/adjust/go-gypsy/yaml"
+	"io"
 	"log"
 	"os"
 	"path"
@@ -37,29 +38,8 @@ func NewGoenv(configFile, environment, logFile string) *Goenv {
 	return goenv
 }
 
-func DefaultGoenv() *Goenv {
-	environment := GetEnv("GO_ENV", "development")
-	configFile := GetEnv("GO_CONFIG", "./config.yml")
-	return NewGoenv(configFile, environment, "")
-}
-
-func TestGoenv() *Goenv {
-	environment := GetEnv("GO_ENV", "testing")
-	configFile := GetEnv("GO_CONFIG", "../run/config.yml")
-	return NewGoenv(configFile, environment, "")
-}
-
-func setLogFile(fileName string) {
-	if fileName == "nil" {
-		return
-	}
-
-	logFile, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
-	if err != nil {
-		panic("goenv failed to open logFile: " + fileName)
-	}
-	log.SetOutput(logFile)
-	log.SetFlags(5)
+func (goenv *Goenv) SetLogger(writer io.Writer) {
+	log.SetOutput(writer)
 }
 
 // get value from current environment
@@ -133,4 +113,29 @@ func GetEnv(key, defaultValue string) string {
 	}
 
 	return value
+}
+
+func DefaultGoenv() *Goenv {
+	environment := GetEnv("GO_ENV", "development")
+	configFile := GetEnv("GO_CONFIG", "./config.yml")
+	return NewGoenv(configFile, environment, "")
+}
+
+func TestGoenv() *Goenv {
+	environment := GetEnv("GO_ENV", "testing")
+	configFile := GetEnv("GO_CONFIG", "../run/config.yml")
+	return NewGoenv(configFile, environment, "")
+}
+
+func setLogFile(fileName string) {
+	if fileName == "nil" {
+		return
+	}
+
+	logFile, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
+	if err != nil {
+		panic("goenv failed to open logFile: " + fileName)
+	}
+	log.SetOutput(logFile)
+	log.SetFlags(5)
 }
