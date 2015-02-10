@@ -1,10 +1,10 @@
 package goenv
 
 import (
-	redis "github.com/adjust/redis-latest-head"
-
 	"fmt"
 	"strings"
+
+	"github.com/adjust/redis"
 )
 
 type RedisLogWriter struct {
