@@ -75,4 +75,23 @@ func TestGetEnvName(t *testing.T) {
 	}
 }
 
+func TestCount(t *testing.T) {
+	goenv := NewGoenv("./test_config.yml", "list", "nil")
+	if goenv.Count("entries") != 3 {
+		t.Error("list count wrong")
+	}
+
+	if goenv.Require("entries[1]") != "b" {
+		t.Error("list entry wrong")
+	}
+
+	if goenv.Count("nested") != 2 {
+		t.Error("nested list count wrong")
+	}
+
+	if goenv.Require("nested[1].value") != "v2" {
+		t.Error("nested list entry wrong")
+	}
+}
+
 // TODO: test new functions

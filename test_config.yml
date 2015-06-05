@@ -3,6 +3,17 @@ config:
     duration: 10s
     number: 1234
 
+list:
+    entries:
+        - a
+        - b
+        - c
+    nested:
+        - key: k1
+          value: v1
+        - key: k2
+          value: v2
+
 custom:
     port: 6711
 

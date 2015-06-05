@@ -102,6 +102,14 @@ func (goenv *Goenv) RequireDuration(spec string) time.Duration {
 	return duration
 }
 
+func (goenv *Goenv) Count(spec string) int {
+	count, err := goenv.configFile.Count(goenv.environment + "." + spec)
+	if err != nil {
+		log.Panicf("goenv Count failed %s", err)
+	}
+	return count
+}
+
 func (goenv *Goenv) GetEnvName() string {
 	return goenv.environment
 }
