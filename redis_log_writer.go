@@ -15,7 +15,6 @@ type RedisLogWriter struct {
 
 func (goenv *Goenv) NewRedisLogWriter(logName string) (logWriter *RedisLogWriter, err error) {
 	host, port, db := goenv.GetNamedRedis("redis_log_writer")
-	poolSize := goenv.GetInt("redis_log_writer.pool_size", 40)
 	network := "tcp"
 	addr := fmt.Sprintf("%s:%s", host, port)
 
@@ -32,8 +31,6 @@ func (goenv *Goenv) NewRedisLogWriter(logName string) (logWriter *RedisLogWriter
 		Network: network,
 		Addr:    addr,
 		DB:      int64(db),
-
-		PoolSize: poolSize,
 	}
 
 	logWriter.redisClient = redis.NewClient(options)
@@ -41,8 +38,9 @@ func (goenv *Goenv) NewRedisLogWriter(logName string) (logWriter *RedisLogWriter
 	if err != nil {
 		return nil, err
 	}
+
 	logWriter.inputChannel = make(chan string, 10000)
-	logWriter.startConsumers(poolSize)
+	go logWriter.startConsumer()
 
 	return logWriter, nil
 }
@@ -52,17 +50,31 @@ func (logWriter *RedisLogWriter) Write(p []byte) (n int, err error) {
 	return len(p), nil
 }
 
-func (logWriter *RedisLogWriter) startConsumers(poolSize int) {
-	for i := 0; i < poolSize; i++ {
-		go logWriter.startConsumer()
+func (writer *RedisLogWriter) startConsumer() {
+	var todo int
+	var batch []string
+
+	for logLine := range writer.inputChannel {
+		batch = append(batch, logLine)
+
+		// are we still on a batch run?
+		if todo > 0 {
+			todo--
+			continue
+		}
+
+		// batch run done, flushing
+		writer.pushToRedis(batch)
+		batch = []string{}
+
+		// fetch next batch run size
+		todo = len(writer.inputChannel) - 1 // otherwise we'd lose the last line
 	}
 }
 
-func (logWriter *RedisLogWriter) startConsumer() {
-	for logLine := range logWriter.inputChannel {
-		err := logWriter.redisClient.RPush(logWriter.logName, logLine).Err()
-		if err != nil {
-			panic(err)
-		}
+func (writer *RedisLogWriter) pushToRedis(logLines []string) {
+	err := writer.redisClient.RPush(writer.logName, logLines...).Err()
+	if err != nil {
+		panic(err)
 	}
 }
