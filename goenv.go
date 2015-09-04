@@ -15,6 +15,20 @@ type Goenv struct {
 	environment string
 }
 
+func New(fallbackConfigFile, fallbackEnvironment string) *Goenv {
+	configFilePath := GetEnv("GO_CONFIG", fallbackConfigFile)
+	configFile := yaml.ConfigFile(configFilePath)
+	if configFile == nil {
+		panic("goenv failed to open configFile: " + configFilePath)
+	}
+
+	environment := GetEnv("GO_ENV", fallbackEnvironment)
+	return &Goenv{
+		configFile:  configFile,
+		environment: environment,
+	}
+}
+
 func NewGoenv(configFile, environment, logFile string) *Goenv {
 	if environment == "" {
 		environment = "development"
