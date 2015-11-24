@@ -124,6 +124,14 @@ func (goenv *Goenv) Count(spec string) int {
 	return count
 }
 
+func (goenv *Goenv) CountOk(spec string) (count int, ok bool) {
+	count, err := goenv.configFile.Count(goenv.environment + "." + spec)
+	if err != nil {
+		return 0, false
+	}
+	return count, true
+}
+
 func (goenv *Goenv) GetEnvName() string {
 	return goenv.environment
 }
