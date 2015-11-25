@@ -94,4 +94,24 @@ func TestCount(t *testing.T) {
 	}
 }
 
+func TestCountOk(t *testing.T) {
+	goenv := NewGoenv("./test_config.yml", "list", "nil")
+
+	count, ok := goenv.CountOk("entries")
+	if !ok {
+		t.Error("list count not ok")
+	}
+	if count != 3 {
+		t.Error("list count wrong")
+	}
+
+	count, ok = goenv.CountOk("nonexistent")
+	if ok {
+		t.Error("list count ok")
+	}
+	if count != 0 {
+		t.Error("list count wrong")
+	}
+}
+
 // TODO: test new functions
