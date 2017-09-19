@@ -1,19 +1,19 @@
-#goenv
+# goenv
 
 This is a nifty little package to help reduce the boilerplate code of our go apps and make them behave more like rails.
 
-##Features
+## Features
 - rails style `config/config.yaml` to configure different databases. (see `example.yaml`)
 - `GO_ENV` similar to `RAILS_ENV` to have development, testing and production databases
 - default `log/server.log` for log output
 - prefab ExitHandler to make your app handle SIGHUP correctly
 
-##How to use
+## How to use
 Get it
 
     go get github.com/adjust/goenv
 
-###General
+### General
 Import it
 
     import github.com/adjust/goenv
@@ -22,7 +22,7 @@ Use it
 
     redis_host, redis_port, redis_db := goenv.GetRedis()
 
-###Exit Handler
+### Exit Handler
 To make your app quit on SIGHUP and execute some function before closing use a custom exit handler.
 
     type MyExitHandler struct {
@@ -37,7 +37,7 @@ To make your app quit on SIGHUP and execute some function before closing use a c
         goenv.SetExitHandler(&MyExitHandler{})
     }
 
-##How to extend database config functions
+## How to extend database config functions
 Easy: Just fork and create a new file (good place is to start with a `postgres.go` copy) with a function returning the parameters you want.
 
 ## License
