@@ -116,6 +116,23 @@ func (goenv *Goenv) Get(spec, defaultValue string) string {
 	return value
 }
 
+// getArray value from current environment
+func (goenv *Goenv) GetArray(spec string, defaultValue []string) []string {
+    node, err := yaml.Child(goenv.configFile.Root, goenv.environment+"."+spec)
+    if err != nil {
+        return defaultValue
+    }
+    list, ok := node.(yaml.List)
+    if !ok {
+        return defaultValue
+    }
+	result := []string{}
+    for _, v := range list {
+        result = append(result, (v.(yaml.Scalar)).String())
+    }
+    return result
+}
+
 func (goenv *Goenv) GetInt(spec string, defaultValue int) int {
 	str := goenv.Get(spec, "")
 	if str == "" {
