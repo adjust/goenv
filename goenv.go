@@ -38,7 +38,7 @@ func New(fallbackConfigFile, fallbackEnvironment string) *Goenv {
 	configFilePath := GetEnv("GO_CONFIG", fallbackConfigFile)
 	configFile := yaml.ConfigFile(configFilePath)
 	if configFile == nil {
-		panic("goenv failed to open configFile: " + configFilePath)
+		panic("goenv failed to open configFile : " + configFilePath)
 	}
 
 	environment := GetEnv("GO_ENV", fallbackEnvironment)
