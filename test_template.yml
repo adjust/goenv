@@ -22,6 +22,7 @@ config_file: GO_CONFIG
         pass: guest
         host: localhost
         port: 5672
+    list: {{ $list := get_env "LIST" }}{{ split_by $list " " }}
     mailFrom: testmail@adjust.com
     mailPasswd: SuperSecret13
     mailServer: smtp.example.com
