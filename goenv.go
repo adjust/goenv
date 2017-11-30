@@ -11,6 +11,7 @@ import (
 	"text/template"
 	"bytes"
 	"regexp"
+	"strings"
 )
 
 type Goenv struct {
@@ -21,6 +22,8 @@ type Goenv struct {
 var templateFuncs = template.FuncMap{
 	"get_env_or_default": GetEnv,
 	"get_env":            GetEnvNoDefault,
+	"replace":            Replace,
+	"split_by":           Split,
 }
 
 var (
@@ -118,19 +121,19 @@ func (goenv *Goenv) Get(spec, defaultValue string) string {
 
 // getArray value from current environment
 func (goenv *Goenv) GetArray(spec string, defaultValue []string) []string {
-    node, err := yaml.Child(goenv.configFile.Root, goenv.environment+"."+spec)
-    if err != nil {
-        return defaultValue
-    }
-    list, ok := node.(yaml.List)
-    if !ok {
-        return defaultValue
-    }
+	node, err := yaml.Child(goenv.configFile.Root, goenv.environment+"."+spec)
+	if err != nil {
+		return defaultValue
+	}
+	list, ok := node.(yaml.List)
+	if !ok {
+		return defaultValue
+	}
 	result := []string{}
-    for _, v := range list {
-        result = append(result, (v.(yaml.Scalar)).String())
-    }
-    return result
+	for _, v := range list {
+		result = append(result, (v.(yaml.Scalar)).String())
+	}
+	return result
 }
 
 func (goenv *Goenv) GetInt(spec string, defaultValue int) int {
@@ -215,6 +218,14 @@ func GetEnv(key, defaultValue string) string {
 	}
 
 	return value
+}
+
+func Replace(key, old, new string) string {
+	return strings.Replace(key, old, new, -1)
+}
+
+func Split(key, separator string) []string {
+	return strings.Split(key, separator)
 }
 
 func DefaultGoenv() *Goenv {
