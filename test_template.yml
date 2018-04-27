@@ -1,0 +1,28 @@
+
+# default: development
+environment: GO_ENV
+
+# default: ./test_config.yml
+config_file: GO_CONFIG
+
+{{ get_env "DEV_ENV" }}:
+    log_file: ./log/server.log
+    port: 8080
+    # local for sid generation
+    sid_redis:
+        db: 1
+        port: 6379
+    # fingerprinting etc.
+    redis:
+        host: {{ get_env "REDIS_HOST" }}
+        db: 1
+        port: {{ get_env "REDIS_PORT" }}
+    amqp:
+        user: guest
+        pass: guest
+        host: localhost
+        port: 5672
+    list: {{ $list := get_env "LIST" }}{{ split_by $list " " }}
+    mailFrom: testmail@adjust.com
+    mailPasswd: SuperSecret13
+    mailServer: smtp.example.com

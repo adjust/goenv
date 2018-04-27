@@ -1,12 +1,16 @@
 package goenv
 
 import (
+	"bytes"
 	"github.com/adjust/go-gypsy/yaml"
 	"io"
 	"log"
 	"os"
 	"path"
+	"regexp"
 	"strconv"
+	"strings"
+	"text/template"
 	"time"
 )
 
@@ -15,11 +19,26 @@ type Goenv struct {
 	environment string
 }
 
+var templateFuncs = template.FuncMap{
+	"get_env_or_default": GetEnv,
+	"get_env":            GetEnvNoDefault,
+	"replace":            Replace,
+	"split_by":           Split,
+}
+
+var (
+	filenameRegex *regexp.Regexp
+)
+
+func init() {
+	filenameRegex = regexp.MustCompile(`\w+\.yml`)
+}
+
 func New(fallbackConfigFile, fallbackEnvironment string) *Goenv {
 	configFilePath := GetEnv("GO_CONFIG", fallbackConfigFile)
 	configFile := yaml.ConfigFile(configFilePath)
 	if configFile == nil {
-		panic("goenv failed to open configFile: " + configFilePath)
+		panic("goenv failed to open configFile : " + configFilePath)
 	}
 
 	environment := GetEnv("GO_ENV", fallbackEnvironment)
@@ -27,6 +46,41 @@ func New(fallbackConfigFile, fallbackEnvironment string) *Goenv {
 		configFile:  configFile,
 		environment: environment,
 	}
+}
+
+func NewTemplateGoenv(configFile, environment, logFile string) *Goenv {
+	if environment == "" {
+		environment = "development"
+	}
+	filename := filenameRegex.FindString(configFile)
+	if filename == "" {
+		panic("file name must has FILENAME.yml")
+	}
+	var tpl bytes.Buffer
+	t, err := template.New(filename).Funcs(templateFuncs).ParseFiles(configFile)
+	if err != nil {
+		panic(err)
+	}
+	err = t.Execute(&tpl, nil)
+	if err != nil {
+		panic(err)
+	}
+	goenv := &Goenv{
+		configFile:  yaml.Config(tpl.String()),
+		environment: environment,
+	}
+
+	if goenv.configFile == nil {
+		panic("goenv failed to open configFile: " + configFile)
+	}
+
+	if logFile == "" {
+		logFile = goenv.Get("log_file", "./log/server.log")
+		os.MkdirAll(path.Dir(logFile), 0755)
+		setLogFile(logFile)
+	}
+
+	return goenv
 }
 
 func NewGoenv(configFile, environment, logFile string) *Goenv {
@@ -63,6 +117,23 @@ func (goenv *Goenv) Get(spec, defaultValue string) string {
 		value = defaultValue
 	}
 	return value
+}
+
+// getArray value from current environment
+func (goenv *Goenv) GetArray(spec string, defaultValue []string) []string {
+	node, err := yaml.Child(goenv.configFile.Root, goenv.environment+"."+spec)
+	if err != nil {
+		return defaultValue
+	}
+	list, ok := node.(yaml.List)
+	if !ok {
+		return defaultValue
+	}
+	result := []string{}
+	for _, v := range list {
+		result = append(result, (v.(yaml.Scalar)).String())
+	}
+	return result
 }
 
 func (goenv *Goenv) GetInt(spec string, defaultValue int) int {
@@ -136,6 +207,10 @@ func (goenv *Goenv) GetEnvName() string {
 	return goenv.environment
 }
 
+func GetEnvNoDefault(key string) string {
+	return GetEnv(key, "")
+}
+
 func GetEnv(key, defaultValue string) string {
 	value := os.Getenv(key)
 	if value == "" {
@@ -143,6 +218,14 @@ func GetEnv(key, defaultValue string) string {
 	}
 
 	return value
+}
+
+func Replace(key, old, new string) string {
+	return strings.Replace(key, old, new, -1)
+}
+
+func Split(key, separator string) []string {
+	return strings.Split(key, separator)
 }
 
 func DefaultGoenv() *Goenv {
@@ -157,6 +240,18 @@ func TestGoenv() *Goenv {
 	return NewGoenv(configFile, environment, "")
 }
 
+func DefaultTemplateGoenv() *Goenv {
+	environment := GetEnv("GO_ENV", "development")
+	configFile := GetEnv("GO_CONFIG", "./config.yml")
+	return NewTemplateGoenv(configFile, environment, "")
+}
+
+func TestTemplateGoenv() *Goenv {
+	environment := GetEnv("GO_ENV", "testing")
+	configFile := GetEnv("GO_CONFIG", "../run/config.yml")
+	return NewTemplateGoenv(configFile, environment, "")
+}
+
 func setLogFile(fileName string) {
 	if fileName == "nil" {
 		return
@@ -166,6 +261,6 @@ func setLogFile(fileName string) {
 	if err != nil {
 		panic("goenv failed to open logFile: " + fileName)
 	}
-	log.SetOutput(logFile)
+	log.SetOutput(io.MultiWriter(os.Stdout, logFile))
 	log.SetFlags(5)
 }
