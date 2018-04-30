@@ -1,17 +1,17 @@
 package goenv
 
 import (
+	"bytes"
 	"github.com/adjust/go-gypsy/yaml"
 	"io"
 	"log"
 	"os"
 	"path"
-	"strconv"
-	"time"
-	"text/template"
-	"bytes"
 	"regexp"
+	"strconv"
 	"strings"
+	"text/template"
+	"time"
 )
 
 type Goenv struct {
@@ -261,6 +261,6 @@ func setLogFile(fileName string) {
 	if err != nil {
 		panic("goenv failed to open logFile: " + fileName)
 	}
-	log.SetOutput(logFile)
+	log.SetOutput(io.MultiWriter(os.Stdout, logFile))
 	log.SetFlags(5)
 }
