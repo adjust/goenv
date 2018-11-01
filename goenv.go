@@ -74,8 +74,7 @@ func NewTemplateGoenv(configFile, environment, logFile string) *Goenv {
 		panic("goenv failed to open configFile: " + configFile)
 	}
 
-	if logFile == "" {
-		logFile = goenv.Get("log_file", "./log/server.log")
+	if logFile != "" {
 		os.MkdirAll(path.Dir(logFile), 0755)
 		setLogFile(logFile)
 	}
@@ -97,8 +96,7 @@ func NewGoenv(configFile, environment, logFile string) *Goenv {
 		panic("goenv failed to open configFile: " + configFile)
 	}
 
-	if logFile == "" {
-		logFile = goenv.Get("log_file", "./log/server.log")
+	if logFile != "" {
 		os.MkdirAll(path.Dir(logFile), 0755)
 		setLogFile(logFile)
 	}
@@ -129,7 +127,7 @@ func (goenv *Goenv) GetArray(spec string, defaultValue []string) []string {
 	if !ok {
 		return defaultValue
 	}
-	result := []string{}
+	var result []string
 	for _, v := range list {
 		result = append(result, (v.(yaml.Scalar)).String())
 	}
