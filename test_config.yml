@@ -2,6 +2,7 @@ config:
     custom: aoeu
     duration: 10s
     number: 1234
+    bool: true
 
 list:
     entries:
