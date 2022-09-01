@@ -54,6 +54,22 @@ func TestGetDuration(t *testing.T) {
 	}
 }
 
+func TestGetBool(t *testing.T) {
+	goenv := NewGoenv("./test_config.yml", "config", "nil")
+
+	t.Run("bool has been found", func(t *testing.T) {
+		if goenv.GetBool("bool") != true {
+			t.Error("bool != true")
+		}
+	})
+
+	t.Run("bool is missing", func(t *testing.T) {
+		if goenv.GetBool("missing_param") != false {
+			t.Error("missing_param != false")
+		}
+	})
+}
+
 func TestRequire(t *testing.T) {
 	defer func() { recover() }()
 	goenv := NewGoenv("./test_config.yml", "config", "nil")

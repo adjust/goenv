@@ -90,6 +90,20 @@ func (goenv *Goenv) GetDuration(spec string, defaultValue string) time.Duration 
 	return duration
 }
 
+func (goenv *Goenv) GetBool(spec string) bool {
+	str := goenv.Get(spec, "")
+	if str == "" {
+		return false
+	}
+
+	param, err := strconv.ParseBool(str)
+	if err != nil {
+		log.Panic("goenv GetBool failed ParseBool", goenv.environment, spec, str)
+	}
+
+	return param
+}
+
 func (goenv *Goenv) Require(spec string) string {
 	value := goenv.Get(spec, "")
 	if value == "" {
