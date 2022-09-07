@@ -104,10 +104,10 @@ func (goenv *Goenv) GetBool(spec string) bool {
 	return param
 }
 
-func (goenv *Goenv) GetFloat(spec string, defaultValue string) float64 {
+func (goenv *Goenv) GetFloat(spec string, defaultValue float64) float64 {
 	str := goenv.Get(spec, "")
 	if str == "" {
-		str = defaultValue
+		return defaultValue
 	}
 
 	param, err := strconv.ParseFloat(str, 64)
