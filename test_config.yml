@@ -3,6 +3,7 @@ config:
     duration: 10s
     number: 1234
     bool: true
+    float64: 5.5
 
 list:
     entries:
