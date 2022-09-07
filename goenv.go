@@ -104,6 +104,20 @@ func (goenv *Goenv) GetBool(spec string) bool {
 	return param
 }
 
+func (goenv *Goenv) GetFloat(spec string, defaultValue string) float64 {
+	str := goenv.Get(spec, "")
+	if str == "" {
+		str = defaultValue
+	}
+
+	param, err := strconv.ParseFloat(str, 64)
+	if err != nil {
+		log.Panic("goenv GetFloat failed ParseFloat", goenv.environment, spec, str)
+	}
+
+	return param
+}
+
 func (goenv *Goenv) Require(spec string) string {
 	value := goenv.Get(spec, "")
 	if value == "" {
