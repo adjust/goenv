@@ -74,13 +74,13 @@ func TestGetFloat(t *testing.T) {
 	goenv := NewGoenv("./test_config.yml", "config", "nil")
 
 	t.Run("float has been found", func(t *testing.T) {
-		if goenv.GetFloat("float64", "0") != 5.5 {
+		if goenv.GetFloat("float64", 0) != 5.5 {
 			t.Error("float != 5.5")
 		}
 	})
 
 	t.Run("float is missing", func(t *testing.T) {
-		if goenv.GetFloat("missing_param", "8") != 8 {
+		if goenv.GetFloat("missing_param", 8) != 8 {
 			t.Error("missing_param != 8")
 		}
 	})
