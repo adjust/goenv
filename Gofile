@@ -3,7 +3,7 @@
         {
             "name" : "production",
             "packages": [
-                { "name" : "github.com/adjust/go-gypsy", "branch" : "master" },
+                { "name" : "github.com/adjust/go-gypsy", "branch" : "quoted-scalars" },
                 { "name" : "github.com/adjust/goenv", "branch" : "." }
             ]
         }
